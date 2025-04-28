@@ -34,4 +34,5 @@ public interface HitRepository extends JpaRepository<Hit, Long> {
             @Param("end") LocalDateTime end,
             @Param("uris") List<String> uris
     );
+
 }
