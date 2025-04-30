@@ -21,6 +21,7 @@ public class PublicEventController {
 
     private final EventService eventService;
     private final StatsClient statsClient;
+    private static final String SERVICE_NAME = "main-service";
 
     @GetMapping()
     public List<EventShortDto> getPublicEvents(@RequestParam(required = false) String text,
@@ -48,7 +49,7 @@ public class PublicEventController {
 
 
         EndpointHit hit = EndpointHit.builder()
-                .app("main-service")
+                .app(SERVICE_NAME)
                 .uri(request.getRequestURI())
                 .ip(request.getRemoteAddr())
                 .timestamp(LocalDateTime.now())
@@ -60,13 +61,12 @@ public class PublicEventController {
     }
 
 
-
     @GetMapping("/{eventId}")
     public EventFullDto getPublicEventById(@PathVariable Long eventId,
                                            HttpServletRequest request) {
 
         EndpointHit hit = EndpointHit.builder()
-                .app("main-service")
+                .app(SERVICE_NAME)
                 .uri(request.getRequestURI())
                 .ip(request.getRemoteAddr())
                 .timestamp(LocalDateTime.now())
@@ -77,5 +77,4 @@ public class PublicEventController {
         String ipAddress = request.getRemoteAddr();
         return eventService.getEventById(eventId, ipAddress);
     }
-
 }
