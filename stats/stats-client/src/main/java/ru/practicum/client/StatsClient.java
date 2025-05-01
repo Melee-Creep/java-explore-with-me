@@ -30,7 +30,7 @@ public class StatsClient {
 
     public List<ViewStats> getStats(LocalDateTime start, LocalDateTime end, List<String> uris, boolean unique) {
         String uri = UriComponentsBuilder
-                .fromPath("/starts")
+                .fromPath("/stats")
                 .queryParam("start", start.format(DATE_TIME_FORMATTER))
                 .queryParam("end", end.format(DATE_TIME_FORMATTER))
                 .queryParam("uris", uris != null ? uris : List.of())
