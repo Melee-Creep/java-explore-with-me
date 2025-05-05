@@ -34,8 +34,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public CommentDto createComment(Long userId, Long eventId, NewCommentDto newCommentDto) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException("Пользователь с id=" + userId + " не найден"));
+        User user = findById(userId);
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new NotFoundException("Событие с id=" + eventId + " не найдено"));
 
@@ -51,8 +50,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public CommentDto updateComment(Long userId, Long commentId, NewCommentDto newCommentDto) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException("Пользователь с id=" + userId + " не найден"));
+        User user = findById(userId);
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new NotFoundException("Комментарий с id=" + commentId + " не найден"));
 
@@ -65,15 +63,12 @@ public class CommentServiceImpl implements CommentService {
         comment.setUpdate(LocalDateTime.now());
         comment.setText(newCommentDto.text());
 
-
         return commentMapper.toCommentDto(commentRepository.save(comment));
     }
 
     @Override
     public void deleteComment(Long userId, Long commentId) {
-
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException("Пользователь с id=" + userId + " не найден"));
+        User user = findById(userId);
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new NotFoundException("Комментарий с id=" + commentId + " не найден"));
 
@@ -99,13 +94,19 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public List<CommentDto> getCommentsByEvent(Long eventId, int from, int size) {
 
-        Event event = eventRepository.findById(eventId)
-                .orElseThrow(() -> new NotFoundException("Событие с id=" + eventId + " не найдено"));
+        if (!eventRepository.existsById(eventId)) {
+            throw new NotFoundException("Событие с id=" + eventId + " не найдено");
+        }
         Pageable pageable = PageRequest.of(from / size, size);
 
         List<Comment> comments = commentRepository.findByEventId(eventId, pageable);
         return comments.stream()
                 .map(commentMapper::toCommentDto)
                 .collect(Collectors.toList());
+    }
+
+    private User findById(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("Пользователь с id=" + userId + " не найден"));
     }
 }

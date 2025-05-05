@@ -13,9 +13,5 @@ import ru.practicum.ewm.user.mapper.UserMapper;
 public interface CommentMapper {
     Comment toEntity(NewCommentDto newCommentDto);
 
-    NewCommentDto toNewCommentDto(Comment comment);
-
-    Comment toEntity(CommentDto commentDto);
-
     CommentDto toCommentDto(Comment comment);
 }
