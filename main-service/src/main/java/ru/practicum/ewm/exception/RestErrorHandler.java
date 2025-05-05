@@ -47,7 +47,7 @@ public class RestErrorHandler  {
                 .errors(List.of(e.getMessage()))
                 .message("Создаваемый объект не удовлетворяет условиям")
                 .reason("Объект с указанным идентификатором не подходит")
-                .status(HttpStatus.NOT_FOUND.name())
+                .status(HttpStatus.CONFLICT.name())
                 .timestamp(LocalDateTime.now())
                 .build();
         return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
@@ -73,7 +73,7 @@ public class RestErrorHandler  {
                 .errors(List.of(e.getMessage()))
                 .message("Создаваемый объект не удовлетворяет условиям")
                 .reason("Объект с указанным идентификатором не подходит")
-                .status(HttpStatus.NOT_FOUND.name())
+                .status(HttpStatus.BAD_REQUEST.name())
                 .timestamp(LocalDateTime.now())
                 .build();
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
